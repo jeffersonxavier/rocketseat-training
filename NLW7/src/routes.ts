@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { AuthenticationUserController } from './controllers/AutheticationUserController';
 import { CreateMessageController } from './controllers/CreateMessageController';
 import { Get3LastMessagesController } from './controllers/Get3LastMessagesController';
+import { ProfileUserController } from './controllers/ProfileUserController';
 import { ensureAuthenticate } from './middlewares/ensureAuthenticate';
 
 const router = Router();
@@ -18,5 +19,6 @@ router.get('/signin/callback', (request, response) => {
 router.post('/authenticate', new AuthenticationUserController().handle);
 router.post('/messages', ensureAuthenticate, new CreateMessageController().handle);
 router.get('/messages/last3', new Get3LastMessagesController().handle);
+router.get('/profile', ensureAuthenticate, new ProfileUserController().handle);
 
 export { router };
