@@ -1,10 +1,10 @@
 {
   "name": "nlw7",
   "version": "1.0.0",
-  "main": "src/app.ts",
+  "main": "src/server.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --exit-child src/app.ts"
+    "dev": "ts-node-dev --exit-child src/server.ts"
   },
   "dependencies": {
     "@prisma/client": "3.3.0",

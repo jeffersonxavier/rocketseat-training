@@ -12,11 +12,9 @@ app.use(cors());
 app.use(express.json());
 app.use(router);
 
-const server = http.createServer(app);
+const serverHttp = http.createServer(app);
 
-server.listen(4000, () => console.log('Server is running on :4000'));
-
-const io = new Server(server, {
+const io = new Server(serverHttp, {
   cors: {
     origin: '*',
   }
@@ -25,3 +23,5 @@ const io = new Server(server, {
 io.on('connection', socket => {
   console.log(`User connected in socket: ${socket.id}`);
 });
+
+export { serverHttp, io };
