@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 import { api } from '../../services/api';
 import styles from './styles.module.scss';
 import LogoImg from '../../assets/logo.svg';
@@ -12,6 +13,13 @@ type Message = {
   }
 }
 
+const messagesQueue: Message[] = [];
+const socket = io('http://localhost:4000');
+
+socket.on('new_message', (message) => {
+  messagesQueue.push(message);
+});
+
 export function MessageList () {
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,14 +30,29 @@ export function MessageList () {
     });
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (messagesQueue.length) {
+        setMessages(prev => ([
+          messagesQueue[0],
+          ...prev.slice(0, 2),
+        ]));
+
+        messagesQueue.shift();
+      }
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className={styles.messageListWrapper}>
       <img src={LogoImg} alt="DoWhile 2021" />
 
       <ul className={styles.messageList}>
         {
-          messages.map(message => (
-          <li key={message.id} className={styles.message}>
+          messages.map((message, index) => (
+          <li key={index} className={styles.message}>
             <p className={styles.messageContent}>{message.text}</p>
             <div className={styles.messageUser}>
               <div className={styles.userImage}>
